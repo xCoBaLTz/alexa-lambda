@@ -54,7 +54,7 @@ const handlers = {
         let count = 0;
         //any intent slot variables are listed here for convenience
         var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders");
-        response = response.body.toString("utf-8");
+        response = response.body.toString();
         var jsonResponse = JSON.parse(response);
         jsonResponse.forEach(count++);
         //Your custom intent handling goes here
