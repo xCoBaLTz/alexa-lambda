@@ -50,30 +50,31 @@ const handlers = {
         speechOutput = "This is a place holder response for the intent named AMAZON.NavigateHomeIntent. This intent has no slots. Anything else?";
         this.emit(":ask", speechOutput, speechOutput);
     },
-    'WorkOrderListIntent': function () {
-        let count = 0;
-        //any intent slot variables are listed here for convenience
+    'WorkOrderCountIntent': function () {
         var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders");
-        var jsonResponse = JSON.parse(response.body.toString('utf-8'));
-        jsonResponse.forEach(() => count++);
-        //Your custom intent handling goes here
-        //reprompt = "This is a place holder response for the intent named WorkOrderListIntent. This intent has no slots. Anything else?";
-        this.emit(":ask", 'You have ' + count.toString() + ' work orders.');
+        var jsonResponse = JSON.parse(response.body.toString());
+        this.emit(":ask", 'You have ' + jsonResponse.length.toString() + ' work orders.');
     },
     'WorkOrderDetailIntent': function () {
-        //any intent slot variables are listed here for convenience
         workOrderId = parseInt(this.event.request.intent.slots.id.value);
-        speechOutput = 'Here is the detail of work order ' + workOrderId.toString();
-    
+        var url = "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders/" + workOrderId.toString();
+        var response = request('GET', url);
+        var jsonResponse = JSON.parse(response.body.toString());
+        speechOutput = 'Here is the detail of work order ' + workOrderId.toString() + '. ' + jsonResponse.notes.toString() + '.';
         this.emit(":ask", speechOutput);
     },
     'CreateWorkOrderIntent': function() {
-        speechOutput = 'Sure, I can help you to create a work order. What is asset id?';
+        workOrderId = 0;
+        notificationId = 0;
+        assetId = 0;
+        description = '';
+        name = '';
+        speechOutput = 'Sure, I can help you to create a work order. Which asset would you like to create this work order for?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderWithAssetIdIntent': function() {
         assetId = parseInt(this.event.request.intent.slots.id.value);
-        speechOutput = 'You said asset id is ' + assetId.toString() + ', what is description?';
+        speechOutput = 'Asset ' + assetId.toString() + ' has been added to the work order, what would you like the description to be for the work order?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderNowIntent': function() {
@@ -82,23 +83,21 @@ const handlers = {
     },
     'AssignWorkOrderIntent': function() {
         name = this.event.request.intent.slots.name.value;
-        speechOutput = 'Assignee is ' + name + ' Work order was created. Is there anything else I can help you?';
+        speechOutput = 'Work order ' + workOrderId.toString() + ' was assigned to ' + name + '. Is there anything else I can help you?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderWithDescriptionIntent': function(){
         description = this.event.request.intent.slots.description.value;
-        speechOutput = 'You said description is ' + description + '. Do you want to assign the work order to someone or create a work order now?';
+        speechOutput = 'The description was added, do you want to assign the work order to someone or create the work order as is?';
         this.emit(':ask', speechOutput, speechOutput)
     },
     'CreateWorkOrderWithNotificationIdIntent': function() {
         notificationId = parseInt(this.event.request.intent.slots.id.value);
-        // make endpoint to create a WO
-        // set global var, workOrderId
         speechOutput = 'Work order was created with notification id ' + notificationId.toString() + ' do you want to assign the work order to someone?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'Unhandled': function () {
-        speechOutput = "The skill didn't quite understand what you wanted.  Do you want to try something else?";
+        speechOutput = "It seems there isn't a handler for that request, please contact Fix Software support for more information.  Do you want to try something else in the mean time?";
         this.emit(':ask', speechOutput, speechOutput);
     }
 };
