@@ -14,6 +14,7 @@
 
 
 let speechOutput;
+let globalWorkOrderId;
 const welcomeOutput = "Welcome to Fix Master, what would you like me to do?";
 const welcomeReprompt = "You can say something like...";
 
@@ -41,6 +42,7 @@ const handlers = {
    },
    'SessionEndedRequest': function () {
         speechOutput = 'Session Ended!';
+        globalWorkOrderId = 0;
         this.emit(':tell', speechOutput);
    },
     'AMAZON.FallbackIntent': function () {
@@ -79,6 +81,7 @@ const handlers = {
     'WorkOrderDetailIntent': function () {
         //any intent slot variables are listed here for convenience
         let workOrderId = parseInt(this.event.request.intent.slots.id.value);
+        globalWorkOrderId = workOrderId;
         speechOutput = 'Here is the detail of work order ' + workOrderId.toString();
     
         this.emit(":tell", speechOutput);
@@ -90,7 +93,7 @@ const handlers = {
     'CreateWorkOrderWithAssetIdIntent': function() {
         let assetId = parseInt(this.event.request.intent.slots.id.value);
         // speechOutput = 'I have created a work order with asset ' + assetId.toString();
-        speechOutput = 'You said asset id is ' + assetId.toSring() + ', what is description?';
+        speechOutput = 'You said asset id is ' + assetId.toString() + ', what is description?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderNowIntent': function() {
@@ -138,9 +141,9 @@ function resolveCanonical(slot){
     }catch(err){
         console.log(err.message);
         canonical = slot.value;
-    };
+    }
     return canonical;
-};
+}
 
 function delegateSlotCollection(){
   console.log("in delegateSlotCollection");
