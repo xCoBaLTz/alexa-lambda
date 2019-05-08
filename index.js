@@ -29,85 +29,101 @@ const request = require('sync-request');
 const APP_ID = 'amzn1.ask.skill.3a6f3407-0f2b-4d22-9843-71ca553ff067';  // TODO replace with your app ID (OPTIONAL).
 speechOutput = '';
 const handlers = {
-	'LaunchRequest': function () {
-		this.emit(':ask', welcomeOutput, welcomeReprompt);
-	},
-	'AMAZON.HelpIntent': function () {
-		speechOutput = 'Placeholder response for AMAZON.HelpIntent.';
-		reprompt = '';
-		this.emit(':ask', speechOutput, reprompt);
-	},
+    'LaunchRequest': function () {
+        this.emit(':ask', welcomeOutput, welcomeReprompt);
+    },
+    'AMAZON.HelpIntent': function () {
+        speechOutput = 'Placeholder response for AMAZON.HelpIntent.';
+        reprompt = '';
+        this.emit(':ask', speechOutput, reprompt);
+    },
    'AMAZON.CancelIntent': function () {
-		speechOutput = 'Placeholder response for AMAZON.CancelIntent';
-		this.emit(':tell', speechOutput);
-	},
+        speechOutput = 'Placeholder response for AMAZON.CancelIntent';
+        this.emit(':tell', speechOutput);
+    },
    'AMAZON.StopIntent': function () {
-		speechOutput = 'Placeholder response for AMAZON.StopIntent.';
-		this.emit(':tell', speechOutput);
+        speechOutput = 'Placeholder response for AMAZON.StopIntent.';
+        this.emit(':tell', speechOutput);
    },
    'SessionEndedRequest': function () {
-		speechOutput = '';
-		assetId = 0;
-		workOrderId = 0;
-		this.emit(':tell', speechOutput);
+        speechOutput = '';
+        assetId = 0;
+        workOrderId = 0;
+        this.emit(':tell', speechOutput);
    },
-	'AMAZON.FallbackIntent': function () {
-		speechOutput = '';
+    'AMAZON.FallbackIntent': function () {
+        speechOutput = '';
 
-		//any intent slot variables are listed here for convenience
+        //any intent slot variables are listed here for convenience
 
 
-		//Your custom intent handling goes here
-		speechOutput = "This is a place holder response for the intent named AMAZON.FallbackIntent. This intent has no slots. Anything else?";
-		this.emit(":ask", speechOutput, speechOutput);
+        //Your custom intent handling goes here
+        speechOutput = "This is a place holder response for the intent named AMAZON.FallbackIntent. This intent has no slots. Anything else?";
+        this.emit(":ask", speechOutput, speechOutput);
     },
-	'AMAZON.NavigateHomeIntent': function () {
-		speechOutput = '';
+    'AMAZON.NavigateHomeIntent': function () {
+        speechOutput = '';
 
-		//any intent slot variables are listed here for convenience
+        //any intent slot variables are listed here for convenience
         
 
-		//Your custom intent handling goes here
-		speechOutput = "This is a place holder response for the intent named AMAZON.NavigateHomeIntent. This intent has no slots. Anything else?";
-		this.emit(":ask", speechOutput, speechOutput);
+        //Your custom intent handling goes here
+        speechOutput = "This is a place holder response for the intent named AMAZON.NavigateHomeIntent. This intent has no slots. Anything else?";
+        this.emit(":ask", speechOutput, speechOutput);
     },
-	'WorkOrderListIntent': function () {
+    'WorkOrderListIntent': function () {
         let count = 0;
-		//any intent slot variables are listed here for convenience
+        //any intent slot variables are listed here for convenience
         var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders");
         response = response.body.toString("utf-8");
         var jsonResponse = JSON.parse(response);
         jsonResponse.forEach(element => {
             count++
         });
-		//Your custom intent handling goes here
-		//reprompt = "This is a place holder response for the intent named WorkOrderListIntent. This intent has no slots. Anything else?";
-		this.emit(":tell", 'You have ' + count.toString() +' work orders');
+        //Your custom intent handling goes here
+        //reprompt = "This is a place holder response for the intent named WorkOrderListIntent. This intent has no slots. Anything else?";
+        this.emit(":tell", 'You have ' + count.toString() + ' work orders.');
     },
-	'WorkOrderDetailIntent': function () {
-		//any intent slot variables are listed here for convenience
+    'WorkOrderDetailIntent': function () {
+        //any intent slot variables are listed here for convenience
 
-		workOrderId = parseInt(this.event.request.intent.slots.id.value);
+        workOrderId = parseInt(this.event.request.intent.slots.id.value);
         speechOutput = 'Here is the detail of work order ' + workOrderId.toString();
-	
-		this.emit(":tell", speechOutput);
+    
+        this.emit(":tell", speechOutput);
     },
-    'CreateWorkOrderIntentWithNotification': function() {
-        speechOutput = 'Sure, I can help you to create a work order. What is your notification id?';
+    'CreateWorkOrderIntent': function() {
+        speechOutput = 'Sure, I can help you to create a work order. What is asset id?';
         this.emit(':ask', speechOutput);
     },
     'CreateWorkOrderWithAssetIdIntent': function() {
         assetId = parseInt(this.event.request.intent.slots.id.value);
         // speechOutput = 'I have created a work order with asset ' + assetId.toString();
-        speechOutput = 'You said ' + assetId.toSource() + ' what is description?'
+        speechOutput = 'You said asset id is ' + assetId.toSring() + ' what is description?';
+        this.emit(':ask', speechOutput);
+    },
+    'CreateWorkOrderNowIntent': function() {
+        speechOutput = 'Work order was created. Do you want to create another work order?';
+        this.emit(':ask', speechOutput);
+    },
+    'AssignWorkOrderIntent': function() {
+        name = this.event.request.intent.slots.name.value;
+        speechOutput = 'Assignee is ' + name + ' Work order was created. Is there anything else I can help you?';
         this.emit(':ask', speechOutput);
     },
     'CreateWorkOrderWithDescriptionIntent': function(){
         description = this.event.request.intent.slots.description.value;
-        speechOutput = 'I have created a work order with asset ' + assetId.toString() + ' and description ' + description;
-        this.emit(':tell', speechOutput)
+        speechOutput = 'You said description is ' + description + ' Do you want to assign the work order to someone or create a work order now?';
+        this.emit(':ask', speechOutput)
     },
-	'Unhandled': function () {
+    'CreateWorkOrderIntentWithNotificationIdIntent': function() {
+        notificationId = parseInt(this.event.request.intent.slots.id.value);
+        // make endpoint to create a WO
+        // set global var, workOrderId
+        speechOutput = 'Work order was created with notification id ' + notificationId.toString() + ' do you want to assign the work order to someone?';
+        this.emit(':ask', speechOutput);
+    },
+    'Unhandled': function () {
         speechOutput = "The skill didn't quite understand what you wanted.  Do you want to try something else?";
         this.emit(':ask', speechOutput, speechOutput);
     }
@@ -126,15 +142,15 @@ exports.handler = (event, context) => {
 // 3. Helper Function  =================================================================================================
 
 function resolveCanonical(slot){
-	//this function looks at the entity resolution part of request and returns the slot value if a synonyms is provided
-	let canonical;
+    //this function looks at the entity resolution part of request and returns the slot value if a synonyms is provided
+    let canonical;
     try{
-		canonical = slot.resolutions.resolutionsPerAuthority[0].values[0].value.name;
-	}catch(err){
-	    console.log(err.message);
-	    canonical = slot.value;
-	};
-	return canonical;
+        canonical = slot.resolutions.resolutionsPerAuthority[0].values[0].value.name;
+    }catch(err){
+        console.log(err.message);
+        canonical = slot.value;
+    };
+    return canonical;
 };
 
 function delegateSlotCollection(){
@@ -142,40 +158,40 @@ function delegateSlotCollection(){
   console.log("current dialogState: "+this.event.request.dialogState);
     if (this.event.request.dialogState === "STARTED") {
       console.log("in Beginning");
-	  let updatedIntent= null;
-	  // updatedIntent=this.event.request.intent;
+      let updatedIntent= null;
+      // updatedIntent=this.event.request.intent;
       //optionally pre-fill slots: update the intent object with slot values for which
       //you have defaults, then return Dialog.Delegate with this updated intent
       // in the updatedIntent property
       //this.emit(":delegate", updatedIntent); //uncomment this is using ASK SDK 1.0.9 or newer
-	  
-	  //this code is necessary if using ASK SDK versions prior to 1.0.9 
-	  if(this.isOverridden()) {
-			return;
-		}
-		this.handler.response = buildSpeechletResponse({
-			sessionAttributes: this.attributes,
-			directives: getDialogDirectives('Dialog.Delegate', updatedIntent, null),
-			shouldEndSession: false
-		});
-		this.emit(':responseReady', updatedIntent);
-		
+      
+      //this code is necessary if using ASK SDK versions prior to 1.0.9 
+      if(this.isOverridden()) {
+            return;
+        }
+        this.handler.response = buildSpeechletResponse({
+            sessionAttributes: this.attributes,
+            directives: getDialogDirectives('Dialog.Delegate', updatedIntent, null),
+            shouldEndSession: false
+        });
+        this.emit(':responseReady', updatedIntent);
+        
     } else if (this.event.request.dialogState !== "COMPLETED") {
       console.log("in not completed");
       // return a Dialog.Delegate directive with no updatedIntent property.
       //this.emit(":delegate"); //uncomment this is using ASK SDK 1.0.9 or newer
-	  
-	  //this code necessary is using ASK SDK versions prior to 1.0.9
-		if(this.isOverridden()) {
-			return;
-		}
-		this.handler.response = buildSpeechletResponse({
-			sessionAttributes: this.attributes,
-			directives: getDialogDirectives('Dialog.Delegate', null, null),
-			shouldEndSession: false
-		});
-		this.emit(':responseReady');
-		
+      
+      //this code necessary is using ASK SDK versions prior to 1.0.9
+        if(this.isOverridden()) {
+            return;
+        }
+        this.handler.response = buildSpeechletResponse({
+            sessionAttributes: this.attributes,
+            directives: getDialogDirectives('Dialog.Delegate', null, null),
+            shouldEndSession: false
+        });
+        this.emit(':responseReady');
+        
     } else {
       console.log("in completed");
       console.log("returning: "+ JSON.stringify(this.event.request.intent));
