@@ -34,8 +34,7 @@ const handlers = {
     },
     'AMAZON.HelpIntent': function () {
         speechOutput = 'Placeholder response for AMAZON.HelpIntent.';
-        reprompt = '';
-        this.emit(':ask', speechOutput, reprompt);
+        this.emit(':ask', speechOutput, speechOutput);
     },
    'AMAZON.CancelIntent': function () {
         speechOutput = 'Placeholder response for AMAZON.CancelIntent';
@@ -94,34 +93,34 @@ const handlers = {
     },
     'CreateWorkOrderIntent': function() {
         speechOutput = 'Sure, I can help you to create a work order. What is asset id?';
-        this.emit(':ask', speechOutput);
+        this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderWithAssetIdIntent': function() {
         assetId = parseInt(this.event.request.intent.slots.id.value);
         // speechOutput = 'I have created a work order with asset ' + assetId.toString();
         speechOutput = 'You said asset id is ' + assetId.toSring() + ' what is description?';
-        this.emit(':ask', speechOutput);
+        this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderNowIntent': function() {
         speechOutput = 'Work order was created. Do you want to create another work order?';
-        this.emit(':ask', speechOutput);
+        this.emit(':ask', speechOutput, speechOutput);
     },
     'AssignWorkOrderIntent': function() {
         name = this.event.request.intent.slots.name.value;
         speechOutput = 'Assignee is ' + name + ' Work order was created. Is there anything else I can help you?';
-        this.emit(':ask', speechOutput);
+        this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderWithDescriptionIntent': function(){
         description = this.event.request.intent.slots.description.value;
         speechOutput = 'You said description is ' + description + ' Do you want to assign the work order to someone or create a work order now?';
-        this.emit(':ask', speechOutput)
+        this.emit(':ask', speechOutput, speechOutput)
     },
     'CreateWorkOrderIntentWithNotificationIdIntent': function() {
         notificationId = parseInt(this.event.request.intent.slots.id.value);
         // make endpoint to create a WO
         // set global var, workOrderId
         speechOutput = 'Work order was created with notification id ' + notificationId.toString() + ' do you want to assign the work order to someone?';
-        this.emit(':ask', speechOutput);
+        this.emit(':ask', speechOutput, speechOutput);
     },
     'Unhandled': function () {
         speechOutput = "The skill didn't quite understand what you wanted.  Do you want to try something else?";
