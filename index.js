@@ -1,18 +1,3 @@
-/* This code has been generated from your interaction model by skillinator.io
-
-/* eslint-disable  func-names */
-/* eslint quote-props: ["error", "consistent"]*/
-
-// There are three sections, Text Strings, Skill Code, and Helper Function(s).
-// You can copy and paste the contents as the code for a new Lambda function, using the alexa-skill-kit-sdk-factskill template.
-// This code includes helper functions for compatibility with versions of the SDK prior to 1.0.9, which includes the dialog directives.
-
-
-
- // 1. Text strings =====================================================================================================
- //    Modify these strings and messages to change the behavior of your Lambda function
-
-
 let speechOutput;
 
 const welcomeOutput = "Welcome to Fix Master, what would you like me to do?";
@@ -56,21 +41,11 @@ const handlers = {
         this.emit(':tell', speechOutput);
    },
     'AMAZON.FallbackIntent': function () {
-        speechOutput = '';
-
-        //any intent slot variables are listed here for convenience
-
-
         //Your custom intent handling goes here
         speechOutput = "This is a place holder response for the intent named AMAZON.FallbackIntent. This intent has no slots. Anything else?";
         this.emit(":ask", speechOutput, speechOutput);
     },
     'AMAZON.NavigateHomeIntent': function () {
-        speechOutput = '';
-
-        //any intent slot variables are listed here for convenience
-        
-
         //Your custom intent handling goes here
         speechOutput = "This is a place holder response for the intent named AMAZON.NavigateHomeIntent. This intent has no slots. Anything else?";
         this.emit(":ask", speechOutput, speechOutput);
@@ -81,7 +56,7 @@ const handlers = {
         var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders");
         response = response.body.toString("utf-8");
         var jsonResponse = JSON.parse(response);
-        jsonResponse.forEach(element => count++);
+        jsonResponse.forEach(count++);
         //Your custom intent handling goes here
         //reprompt = "This is a place holder response for the intent named WorkOrderListIntent. This intent has no slots. Anything else?";
         this.emit(":tell", 'You have ' + count.toString() + ' work orders.');
