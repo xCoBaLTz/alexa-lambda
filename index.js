@@ -59,14 +59,14 @@ const handlers = {
         jsonResponse.forEach(count++);
         //Your custom intent handling goes here
         //reprompt = "This is a place holder response for the intent named WorkOrderListIntent. This intent has no slots. Anything else?";
-        this.emit(":tell", 'You have ' + count.toString() + ' work orders.');
+        this.emit(":ask", 'You have ' + count.toString() + ' work orders.');
     },
     'WorkOrderDetailIntent': function () {
         //any intent slot variables are listed here for convenience
         workOrderId = parseInt(this.event.request.intent.slots.id.value);
         speechOutput = 'Here is the detail of work order ' + workOrderId.toString();
     
-        this.emit(":tell", speechOutput);
+        this.emit(":ask", speechOutput);
     },
     'CreateWorkOrderIntent': function() {
         speechOutput = 'Sure, I can help you to create a work order. What is asset id?';
