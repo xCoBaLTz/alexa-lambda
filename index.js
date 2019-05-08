@@ -71,9 +71,7 @@ const handlers = {
         var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders");
         response = response.body.toString("utf-8");
         var jsonResponse = JSON.parse(response);
-        jsonResponse.forEach(element => {
-            count++
-        });
+        jsonResponse.forEach(element => count++);
         //Your custom intent handling goes here
         //reprompt = "This is a place holder response for the intent named WorkOrderListIntent. This intent has no slots. Anything else?";
         this.emit(":tell", 'You have ' + count.toString() + ' work orders.');
