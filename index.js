@@ -8,6 +8,7 @@ let name = '';
 let description = '';
 let assetId = 0;
 let notificationId = 0;
+let workOrderRequest = {};
 
 // 2. Skill Code =======================================================================================================
 "use strict";
@@ -69,30 +70,39 @@ const handlers = {
         assetId = 0;
         description = '';
         name = '';
+        workOrderRequest = {};
         speechOutput = 'Sure, I can help you to create a work order. Which asset would you like to create this work order for?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderWithAssetIdIntent': function() {
         assetId = parseInt(this.event.request.intent.slots.id.value);
+        workOrderRequest.assetId = assetId;
         speechOutput = 'Asset ' + assetId.toString() + ' has been added to the work order, what would you like the description to be for the work order?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderNowIntent': function() {
-        speechOutput = 'Work order was created. Do you want to create another work order?';
+        var res = request('POST', 'http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders', {
+            json: workOrderRequest,
+        });
+        var id = JSON.parse(res.getBody('utf8').id);
+        speechOutput = 'Work order ' + id + ' was created. Do you want to create another work order?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'AssignWorkOrderIntent': function() {
         name = this.event.request.intent.slots.name.value;
+        workOrderRequest.assignTo = name;
         speechOutput = 'Work order ' + workOrderId.toString() + ' was assigned to ' + name + '. Is there anything else I can help you?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderWithDescriptionIntent': function(){
         description = this.event.request.intent.slots.description.value;
+        workOrderRequest.description = description;
         speechOutput = 'The description was added, do you want to assign the work order to someone or create the work order as is?';
         this.emit(':ask', speechOutput, speechOutput)
     },
     'CreateWorkOrderWithNotificationIdIntent': function() {
         notificationId = parseInt(this.event.request.intent.slots.id.value);
+        workOrderRequest.notificationId;
         speechOutput = 'Work order was created with notification id ' + notificationId.toString() + ' do you want to assign the work order to someone?';
         this.emit(':ask', speechOutput, speechOutput);
     },
