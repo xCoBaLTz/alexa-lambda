@@ -72,7 +72,6 @@ const handlers = {
 		this.emit(":ask", speechOutput, speechOutput);
     },
 	'WorkOrderListIntent': function () {
-        speechOutput = 'You have 10 work orders';
         let count = 0;
 		//any intent slot variables are listed here for convenience
         var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders");
@@ -83,7 +82,7 @@ const handlers = {
         });
 		//Your custom intent handling goes here
 		//reprompt = "This is a place holder response for the intent named WorkOrderListIntent. This intent has no slots. Anything else?";
-		this.emit(":tell", count.toString());
+		this.emit(":tell", 'You have ' + count.toString() +' work orders');
     },
 	'WorkOrderDetailIntent': function () {
 		//any intent slot variables are listed here for convenience
