@@ -87,10 +87,10 @@ const handlers = {
     },
     'CreateWorkOrderWithDescriptionIntent': function(){
         description = this.event.request.intent.slots.description.value;
-        speechOutput = 'You said description is ' + description + ' Do you want to assign the work order to someone or create a work order now?';
+        speechOutput = 'You said description is ' + description + '. Do you want to assign the work order to someone or create a work order now?';
         this.emit(':ask', speechOutput, speechOutput)
     },
-    'CreateWorkOrderIntentWithNotificationIdIntent': function() {
+    'CreateWorkOrderWithNotificationIdIntent': function() {
         notificationId = parseInt(this.event.request.intent.slots.id.value);
         // make endpoint to create a WO
         // set global var, workOrderId
