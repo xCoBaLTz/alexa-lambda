@@ -14,13 +14,13 @@
 
 
 let speechOutput;
-let reprompt;
-let welcomeOutput = "Welcome to Fix Master, what would you like me to do?";
-let welcomeReprompt = "You can say something like...";
+const welcomeOutput = "Welcome to Fix Master, what would you like me to do?";
+const welcomeReprompt = "You can say something like...";
 
-let assetId = 0;
-let workOrderId = 0;
-let description = '';
+var assetId = 0;
+var workOrderId = 0;
+var description = '';
+var notificationId = 0;
 
 // 2. Skill Code =======================================================================================================
 "use strict";
@@ -45,9 +45,11 @@ const handlers = {
         this.emit(':tell', speechOutput);
    },
    'SessionEndedRequest': function () {
-        speechOutput = '';
+        speechOutput = 'Session Ended!';
         assetId = 0;
         workOrderId = 0;
+        notificationId = 0;
+        description = '';
         this.emit(':tell', speechOutput);
    },
     'AMAZON.FallbackIntent': function () {
@@ -131,8 +133,6 @@ const handlers = {
 exports.handler = (event, context) => {
     const alexa = Alexa.handler(event, context);
     alexa.appId = APP_ID;
-    // To enable string internationalization (i18n) features, set a resources object.
-    //alexa.resources = languageStrings;
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
