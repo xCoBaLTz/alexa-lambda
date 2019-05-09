@@ -86,7 +86,7 @@ const handlers = {
         var res = request('POST', BASE_URL + '/work-orders', {
             json: workOrderRequest,
         });
-        var id = JSON.parse(res.getBody('utf-8').id);
+        var id = JSON.parse(res.getBody('utf-8')).id;
         speechOutput = 'Work order ' + id.toString() + ' was created. Do you want to create another work order?';
         this.emit(':ask', speechOutput, speechOutput);
     },
@@ -96,7 +96,7 @@ const handlers = {
         var res = request('POST', BASE_URL + '/work-orders', {
             json: workOrderRequest,
         });
-        workOrderId = JSON.parse(res.getBody('utf-8').id);
+        workOrderId = JSON.parse(res.getBody('utf-8')).id;
         speechOutput = 'Work order ' + workOrderId.toString() + ' was created and assigned to ' + name + '. Is there anything else I can help you with?';
         this.emit(':ask', speechOutput, speechOutput);
     },
@@ -115,7 +115,7 @@ const handlers = {
         var res = request('POST', BASE_URL + '/notifications/' + notificationId.toString() + '/work-orders', {
             json: {},
         });
-        workOrderId = JSON.parse(res.getBody('utf-8').id);
+        workOrderId = JSON.parse(res.getBody('utf-8')).id;
 
         speechOutput = 'Work order ' + workOrderId.toString() + ' was created with notification id ' + notificationId.toString() + '. Is there anything else I can help you with?';
         this.emit(':ask', speechOutput, speechOutput);
@@ -128,7 +128,7 @@ const handlers = {
         var res = request('POST', BASE_URL + '/notifications/' + notificationId.toString() + '/work-orders', {
             json: workOrderRequest,
         });
-        workOrderId = JSON.parse(res.getBody('utf-8').id);
+        workOrderId = JSON.parse(res.getBody('utf-8')).id;
 
         speechOutput = 'Work order ' + workOrderId.toString() + ' was created with notification id ' + notificationId.toString() + ' and assigned to ' + name + '. Is there anything else I can help you with?';
         this.emit(':ask', speechOutput, speechOutput);
