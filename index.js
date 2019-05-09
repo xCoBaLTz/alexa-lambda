@@ -30,7 +30,7 @@ const handlers = {
         this.emit(':tell', speechOutput);
     },
    'AMAZON.StopIntent': function () {
-        speechOutput = 'Placeholder response for AMAZON.StopIntent.';
+        speechOutput = 'Thank you for listening to the demo, we hope you enjoyed, WHACKS out!';
         this.emit(':tell', speechOutput);
    },
    'SessionEndedRequest': function () {
@@ -44,7 +44,7 @@ const handlers = {
    },
     'AMAZON.FallbackIntent': function () {
         //Your custom intent handling goes here
-        speechOutput = "This is a place holder response for the intent named AMAZON.FallbackIntent. This intent has no slots. Anything else?";
+        speechOutput = "Sorry I didn't get that, is there anything else I can help you with?";
         this.emit(":ask", speechOutput, speechOutput);
     },
     'AMAZON.NavigateHomeIntent': function () {

@@ -12,5 +12,5 @@ workOrderRequest.description = 'test';
 var res = request('POST', BASE_URL + '/work-orders', {
     json: workOrderRequest,
 });
-var body = JSON.parse(res.getBody('utf-8'));
-console.log(body);
+var id = JSON.parse(res.getBody('utf-8')).id;
+console.log(id);
