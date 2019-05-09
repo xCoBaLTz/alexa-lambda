@@ -15,6 +15,7 @@ let workOrderRequest = {};
 const Alexa = require('alexa-sdk');
 const request = require('sync-request');
 const APP_ID = 'amzn1.ask.skill.3a6f3407-0f2b-4d22-9843-71ca553ff067';  // TODO replace with your app ID (OPTIONAL).
+const BASE_URL = 'http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/'
 speechOutput = '';
 const handlers = {
     'LaunchRequest': function () {
@@ -52,13 +53,13 @@ const handlers = {
         this.emit(":ask", speechOutput, speechOutput);
     },
     'WorkOrderCountIntent': function () {
-        var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/work-orders");
+        var response = request('GET', BASE_URL + "work-orders");
         var jsonResponse = JSON.parse(response.body.toString());
         this.emit(":ask", 'You have ' + jsonResponse.length.toString() + ' work orders.');
     },
     'WorkOrderDetailIntent': function () {
         workOrderId = parseInt(this.event.request.intent.slots.id.value);
-        var url = "http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/work-orders/" + workOrderId.toString();
+        var url = BASE_URL + "work-orders/" + workOrderId.toString();
         var response = request('GET', url);
         var jsonResponse = JSON.parse(response.body.toString());
         speechOutput = 'Here is the detail of work order ' + workOrderId.toString() + '. ' + jsonResponse.notes.toString() + '.';
@@ -81,7 +82,7 @@ const handlers = {
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderNowIntent': function() {
-        var res = request('POST', 'http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/work-orders', {
+        var res = request('POST', BASE_URL + 'work-orders', {
             json: workOrderRequest,
         });
         var id = JSON.parse(res.getBody('utf8').id);
@@ -104,6 +105,15 @@ const handlers = {
         notificationId = parseInt(this.event.request.intent.slots.id.value);
         workOrderRequest.notificationId;
         speechOutput = 'Work order was created with notification id ' + notificationId.toString() + ' do you want to assign the work order to someone?';
+        this.emit(':ask', speechOutput, speechOutput);
+    },
+    'AssetMeterReadingRequestIntent': function() {
+        let assetId = parseInt(this.event.request.intent.slots.id.value);
+        var url = BASE_URL + "assets/" + assetId.toString() + '/readings';
+        var response = request('GET', url);
+        var celsius = JSON.parse(res.getBody('utf8').celsius);
+        var fahrenheit = JSON.parse(res.getBody('utf8').fahrenheit);
+        speechOutput = 'The temperature of asset id ' + assetId.toString() + ' is ' + celsius.toString() + ' celsius, ' + fahrenheit.toString + ' fahrenheit';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'Unhandled': function () {
