@@ -1,6 +1,6 @@
 let speechOutput;
 
-const welcomeOutput = "Welcome to Fix Master, what would you like me to do?";
+const welcomeOutput = "Welcome to Fix Software, what would you like me to do?";
 const welcomeReprompt = "You can say something like...";
 
 let workOrderId = 0;
