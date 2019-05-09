@@ -99,6 +99,10 @@ const handlers = {
         speechOutput = 'Work order ' + workOrderId.toString() + ' was created and assigned to ' + name + '. Is there anything else I can help you with?';
         this.emit(':ask', speechOutput, speechOutput);
     },
+    'IWantToAssignIntent': function(){
+        speechOutput = 'Okay, who would you like to assign the work order to?';
+        this.emit(':ask', speechOutput, speechOutput)
+    },
     'CreateWorkOrderWithDescriptionIntent': function(){
         description = this.event.request.intent.slots.description.value;
         workOrderRequest.description = description;
