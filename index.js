@@ -83,11 +83,10 @@ const handlers = {
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderNowIntent': function() {
-        // var res = request('POST', BASE_URL + '/work-orders', {
-        //     json: workOrderRequest,
-        // });
-        // var id = JSON.parse(res.getBody('utf-8').id);
-        var id = Math.random() * 100;
+        var res = request('POST', BASE_URL + '/work-orders', {
+            json: workOrderRequest,
+        });
+        var id = JSON.parse(res.getBody('utf-8').id);
         speechOutput = 'Work order ' + id + ' was created. Do you want to create another work order?';
         this.emit(':ask', speechOutput, speechOutput);
     },
@@ -95,11 +94,10 @@ const handlers = {
         name = this.event.request.intent.slots.name.value;
         workOrderRequest.assignedTo = {};
         workOrderRequest.assignedTo.name = name;
-        // var res = request('POST', BASE_URL + '/work-orders', {
-        //     json: workOrderRequest,
-        // });
-        // workOrderId = JSON.parse(res.getBody('utf-8').id);
-        workOrderId = Math.random() * 100;
+        var res = request('POST', BASE_URL + '/work-orders', {
+            json: workOrderRequest,
+        });
+        workOrderId = JSON.parse(res.getBody('utf-8').id);
         speechOutput = 'Work order ' + workOrderId.toString() + ' was created and assigned to ' + name + '. Is there anything else I can help you with?';
         this.emit(':ask', speechOutput, speechOutput);
     },

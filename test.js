@@ -1,15 +1,16 @@
 const request = require('sync-request');
 
 let workOrderRequest = {};
+const BASE_URL = 'http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api'
 
-let count = 0;
-//any intent slot variables are listed here for convenience
-var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders");
-var jsonResponse = JSON.parse(response.body.toString());
-console.log(jsonResponse.length);
-
-workOrderRequest.id = 1;
-workOrderRequest.name = 'Seanan';
+workOrderRequest.asset = {};
+workOrderRequest.asset.id = 100;
+workOrderRequest.assignTo = "Seanan";
 workOrderRequest.description = 'test';
 
-console.log(workOrderRequest);
+//any intent slot variables are listed here for convenience
+var res = request('POST', BASE_URL + '/work-orders', {
+    json: workOrderRequest,
+});
+var body = JSON.parse(res.getBody('utf-8'));
+console.log(body);
