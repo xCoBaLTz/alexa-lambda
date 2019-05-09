@@ -52,13 +52,13 @@ const handlers = {
         this.emit(":ask", speechOutput, speechOutput);
     },
     'WorkOrderCountIntent': function () {
-        var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders");
+        var response = request('GET', "http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/work-orders");
         var jsonResponse = JSON.parse(response.body.toString());
         this.emit(":ask", 'You have ' + jsonResponse.length.toString() + ' work orders.');
     },
     'WorkOrderDetailIntent': function () {
         workOrderId = parseInt(this.event.request.intent.slots.id.value);
-        var url = "http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders/" + workOrderId.toString();
+        var url = "http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/work-orders" + workOrderId.toString();
         var response = request('GET', url);
         var jsonResponse = JSON.parse(response.body.toString());
         speechOutput = 'Here is the detail of work order ' + workOrderId.toString() + '. ' + jsonResponse.notes.toString() + '.';
@@ -81,7 +81,7 @@ const handlers = {
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderNowIntent': function() {
-        var res = request('POST', 'http://fiix-whacks.us-east-1.elasticbeanstalk.com/orders', {
+        var res = request('POST', 'http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/work-orders', {
             json: workOrderRequest,
         });
         var id = JSON.parse(res.getBody('utf8').id);
