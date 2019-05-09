@@ -85,7 +85,7 @@ const handlers = {
         var res = request('POST', BASE_URL + 'work-orders', {
             json: workOrderRequest,
         });
-        var id = JSON.parse(res.getBody('utf8').id);
+        var id = JSON.parse(res.getBody('utf-8').id);
         speechOutput = 'Work order ' + id + ' was created. Do you want to create another work order?';
         this.emit(':ask', speechOutput, speechOutput);
     },
@@ -109,12 +109,11 @@ const handlers = {
     },
     'AssetMeterReadingRequestIntent': function() {
         let assetId = parseInt(this.event.request.intent.slots.id.value);
-        // var url = BASE_URL + "assets/" + assetId.toString();
-        // var response = request('GET', url);
-        // var celsius = JSON.parse(res.getBody('utf8').assetReadings[0].celsius);
-        // var fahrenheit = JSON.parse(res.getBody('utf8').assetReadings[0].fahrenheit);
-        // speechOutput = 'The temperature of asset id ' + assetId.toString() + ' is ' + celsius.toString() + ' celsius, ' + fahrenheit.toString() + ' fahrenheit';
-        speechOutput = 'The temperature of asset id ' + assetId.toString() + ' is 100'
+        var url = BASE_URL + "assets/" + assetId.toString();
+        var response = request('GET', url);
+        var celsius = JSON.parse(response.body.toString()).assetReadings[0].celsius;
+        var fahrenheit = JSON.parse(response.body.toString()).assetReadings[0].fahrenheit;
+        speechOutput = 'The temperature of asset id ' + assetId.toString() + ' is ' + celsius.toString() + ' degrees celsius, or ' + fahrenheit.toString() + ' degrees fahrenheit.';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'Unhandled': function () {
