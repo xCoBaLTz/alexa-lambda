@@ -58,7 +58,7 @@ const handlers = {
     },
     'WorkOrderDetailIntent': function () {
         workOrderId = parseInt(this.event.request.intent.slots.id.value);
-        var url = "http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/work-orders" + workOrderId.toString();
+        var url = "http://fiix-whacks.us-east-1.elasticbeanstalk.com/hack-api/work-orders/" + workOrderId.toString();
         var response = request('GET', url);
         var jsonResponse = JSON.parse(response.body.toString());
         speechOutput = 'Here is the detail of work order ' + workOrderId.toString() + '. ' + jsonResponse.notes.toString() + '.';
