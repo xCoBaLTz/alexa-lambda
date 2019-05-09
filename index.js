@@ -77,6 +77,7 @@ const handlers = {
     },
     'CreateWorkOrderWithAssetIdIntent': function() {
         assetId = parseInt(this.event.request.intent.slots.id.value);
+        workOrderRequest.asset = {};
         workOrderRequest.asset.id = assetId;
         speechOutput = 'Asset ' + assetId.toString() + ' has been added to the work order, what would you like the description to be for the work order?';
         this.emit(':ask', speechOutput, speechOutput);
@@ -91,6 +92,7 @@ const handlers = {
     },
     'AssignWorkOrderIntent': function() {
         name = this.event.request.intent.slots.name.value;
+        workOrderRequest.assignedTo = {};
         workOrderRequest.assignedTo.name = name;
         var res = request('POST', BASE_URL + '/work-orders', {
             json: workOrderRequest,
@@ -119,6 +121,7 @@ const handlers = {
         notificationId = parseInt(this.event.request.intent.slots.id.value);
         name = this.event.request.intent.slots.name.value;
         workOrderRequest.notificationId = notificationId;
+        workOrderRequest.assignedTo = {};
         workOrderRequest.assignedTo.name = name;
         speechOutput = 'Work order was created with notification id ' + notificationId.toString() + ' and assigned to ' + name + '. Is there anything else I can help you with?';
         this.emit(':ask', speechOutput, speechOutput);
