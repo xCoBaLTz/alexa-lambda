@@ -87,7 +87,7 @@ const handlers = {
             json: workOrderRequest,
         });
         var id = JSON.parse(res.getBody('utf-8').id);
-        speechOutput = 'Work order ' + id + ' was created. Do you want to create another work order?';
+        speechOutput = 'Work order ' + id.toString() + ' was created. Do you want to create another work order?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'AssignWorkOrderIntent': function() {
@@ -117,7 +117,7 @@ const handlers = {
         });
         workOrderId = JSON.parse(res.getBody('utf-8').id);
 
-        speechOutput = 'Work order ' + workOrderId + ' was created with notification id ' + notificationId.toString() + '. Is there anything else I can help you with?';
+        speechOutput = 'Work order ' + workOrderId.toString() + ' was created with notification id ' + notificationId.toString() + '. Is there anything else I can help you with?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'CreateWorkOrderWithNotificationIdAssignedIntent': function() {
@@ -130,7 +130,7 @@ const handlers = {
         });
         workOrderId = JSON.parse(res.getBody('utf-8').id);
 
-        speechOutput = 'Work order ' + workOrderId + ' was created with notification id ' + notificationId.toString() + ' and assigned to ' + name + '. Is there anything else I can help you with?';
+        speechOutput = 'Work order ' + workOrderId.toString() + ' was created with notification id ' + notificationId.toString() + ' and assigned to ' + name + '. Is there anything else I can help you with?';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'AssetMeterReadingRequestIntent': function() {
