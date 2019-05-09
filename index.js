@@ -111,8 +111,8 @@ const handlers = {
         let assetId = parseInt(this.event.request.intent.slots.id.value);
         var url = BASE_URL + "assets/" + assetId.toString() + '/readings';
         var response = request('GET', url);
-        var celsius = JSON.parse(res.getBody('utf8').celsius);
-        var fahrenheit = JSON.parse(res.getBody('utf8').fahrenheit);
+        var celsius = JSON.parse(res.getBody('utf8').assetReadings[0].celsius);
+        var fahrenheit = JSON.parse(res.getBody('utf8').assetReadings[0].fahrenheit);
         speechOutput = 'The temperature of asset id ' + assetId.toString() + ' is ' + celsius.toString() + ' celsius, ' + fahrenheit.toString() + ' fahrenheit';
         this.emit(':ask', speechOutput, speechOutput);
     },
