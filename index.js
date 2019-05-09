@@ -113,7 +113,7 @@ const handlers = {
         var response = request('GET', url);
         var celsius = JSON.parse(response.body.toString()).assetReadings[0].celsius;
         var fahrenheit = JSON.parse(response.body.toString()).assetReadings[0].fahrenheit;
-        speechOutput = 'The temperature of asset id ' + assetId.toString() + ' is ' + celsius.toString() + ' degrees celsius, or ' + fahrenheit.toString() + ' degrees fahrenheit.';
+        speechOutput = 'The temperature of asset ' + assetId.toString() + ' is ' + celsius.toString() + ' degrees celsius, or ' + fahrenheit.toString() + ' degrees fahrenheit.';
         this.emit(':ask', speechOutput, speechOutput);
     },
     'Unhandled': function () {
